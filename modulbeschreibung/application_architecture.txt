@@ -9,6 +9,8 @@ Skripten:
 	- lehrtuhlmitarbeiter - Kontakte
 	- Einzelanforderungen
 
+- Skriptenverkauf
+
 
 Druck:
 - Klickzähler, SNMP
