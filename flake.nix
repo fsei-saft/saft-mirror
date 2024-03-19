@@ -11,15 +11,16 @@
         inherit system;
         overlays = [ nixpkgs-mozilla.overlays.rust ];
       };
-    in with pkgs; {
-      devShell = mkShell rec {
-        buildInputs = [
-          (rustChannelOf { channel = "stable"; date = "2024-02-08"; }).rust
-          (rustChannelOf { channel = "stable"; date = "2024-02-08"; }).rust-src
+    in {
+      devShell = pkgs.mkShell rec {
+        buildInputs = with pkgs; [
+          (rustChannelOf { channel = "nightly"; date = "2024-02-08"; }).rust
+          (rustChannelOf { channel = "nightly"; date = "2024-02-08"; }).rust-src
+          typst
         ];
       };
 
-      packages.default = mkDerivation {};
+      packages.default = pkgs.mkDerivation {};
     }
   );
 }

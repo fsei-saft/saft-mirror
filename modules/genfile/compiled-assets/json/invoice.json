@@ -1,0 +1,23 @@
+{
+    "number": "24-SAFT-001",
+    "recipient": {
+        "address": "Georg Simon Ohm\nTheresienstraße 90\n80333 München"
+    },
+    "issuer": "James Clerk Maxwell",
+    "items": [
+        {
+            "amount": 1,
+            "description": "Poster",
+            "netto": 1.0,
+            "brutto": 1.0,
+            "tax_rate": 0.19
+        },
+        {
+            "amount": 1,
+            "description": "Thesis",
+            "netto": 1.0,
+            "brutto": 1.0,
+            "tax_rate": 0.19
+        }
+    ]
+}

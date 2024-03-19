@@ -1,5 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
-    "modules/genfile"
+    "modules/libsaft",
+    "modules/genfile",
+    "modules/include_json"
 ]

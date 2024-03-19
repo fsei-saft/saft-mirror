@@ -3,6 +3,15 @@ name = "genfile"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+libsaft = { path = "../libsaft", features = ["pdf", "web"] }
+include_json = { path = "../include_json" }
+
+rocket = "0.5"
+rocket_okapi = { version = "0.8", features = ["rapidoc"] }
+schemars = "0.8"
+
+serde = "1.0"
+serde_json = "1.0"
+
+lazy_static = { version = "1.4", features = [] }
