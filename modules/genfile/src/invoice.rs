@@ -1,3 +1,4 @@
+use include_json::{include_json, IncludeJson};
 use rocket::{FromForm, get};
 use rocket::http::ContentType;
 use rocket::serde::{Deserialize, Serialize};
@@ -5,7 +6,7 @@ use rocket_okapi::{JsonSchema, openapi};
 use libsaft::err::SaftResult;
 use libsaft::pdf::gen_pdf_from_typst_template;
 
-#[derive(Serialize, Deserialize, FromForm, JsonSchema, Clone)]
+#[derive(Serialize, Deserialize, FromForm, JsonSchema, Clone, IncludeJson)]
 pub struct InvoiceInfo {
     number: String,
     recipient: InvoiceRecipient,
@@ -13,12 +14,12 @@ pub struct InvoiceInfo {
     items: Vec<InvoiceItem>
 }
 
-#[derive(Serialize, Deserialize, FromForm, JsonSchema, Clone)]
+#[derive(Serialize, Deserialize, FromForm, JsonSchema, Clone, IncludeJson)]
 pub struct InvoiceRecipient {
     address: String,
 }
 
-#[derive(Serialize, Deserialize, FromForm, JsonSchema, Clone)]
+#[derive(Serialize, Deserialize, FromForm, JsonSchema, Clone, IncludeJson)]
 pub struct InvoiceItem {
     amount: i32,
     description: String,
@@ -28,7 +29,7 @@ pub struct InvoiceItem {
 }
 
 impl Default for InvoiceInfo {
-    fn default() -> Self { serde_json::from_str(include_str!("../compiled-assets/json/invoice.json")).unwrap() }
+    fn default() -> Self { include_json!(InvoiceInfo, "../compiled-assets/json/invoice.json") }
 }
 
 #[openapi]

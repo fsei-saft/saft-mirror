@@ -6,14 +6,15 @@ mod processor;
 mod cache;
 
 use crate::processor::process_value;
+use crate::cache::{register_struct, StructDescription, StructFieldDescription};
 
 use proc_macro2::{Ident, TokenStream};
 use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
-use quote::{format_ident, quote};
-use serde_json::{Map, Value};
-use syn::{parse2, parse_macro_input, Data, DeriveInput, Fields, LitStr, Token, parse};
+use quote::{quote, ToTokens};
+use serde_json::Value;
+use syn::{parse_macro_input, Data, DeriveInput, Fields, LitStr, Token, parse};
 use syn::parse::{Parse, ParseStream};
 
 struct Input {
@@ -36,7 +37,7 @@ impl Parse for Input {
 #[proc_macro]
 pub fn include_json(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let span = input.clone().into_iter().next().unwrap().span();
-    let input = parse::<Input>(input).unwrap();
+    let input = parse::<Input>(input).expect("macro expects a type and a path");
     include_json_impl(input.ty, input.st.value(), span.source_file().path()).into()
 }
 
@@ -51,23 +52,22 @@ fn include_json_impl(ty: Ident, path: String, mut source_path: PathBuf) -> Token
     };
 
     let mut buf = String::new();
-    File::open(path).unwrap().read_to_string(&mut buf).unwrap();
+    File::open(path).expect("file not found").read_to_string(&mut buf).expect("file not readable");
 
     parse_json_impl(ty, buf)
 }
 
 #[proc_macro]
 pub fn parse_json(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    let input = parse::<Input>(input).unwrap();
+    let input = parse::<Input>(input).expect("json not parseable");
     parse_json_impl(input.ty, input.st.value()).into()
 }
 
 fn parse_json_impl(ty: Ident, data: String) -> TokenStream {
-    let json: Value = serde_json::from_str(data.as_str()).unwrap();
+    let json: Value = serde_json::from_str(data.as_str()).expect("json not parseable");
 
-    process_value(json, ty)
+    process_value(json, ty.to_string())
 }
-
 
 #[proc_macro_derive(IncludeJson)]
 pub fn include_json_derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
@@ -76,23 +76,23 @@ pub fn include_json_derive(input: proc_macro::TokenStream) -> proc_macro::TokenS
 }
 
 fn include_json_derive_impl(input: DeriveInput) -> TokenStream {
-    let _ident = input.ident;
+    let ident = input.ident;
 
     if let Data::Struct(input) = input.data {
         if let Fields::Named(input) = input.fields {
-            let mut fields: Vec<TokenStream> = Vec::new();
-
-            for field in input.named.into_iter() {
-                let name = format_ident!("IncludeJsonType_{}", field.ident.unwrap());
-                let ty = field.ty;
-                fields.push(quote!{type #name = #ty;});
-            }
-
-            return quote!{
-                #(#fields)*
-            }.into();
+            let fields: Vec<_> = input.named.into_iter().map(|f| {
+                StructFieldDescription {
+                    name: f.ident.expect("only named fields supported").to_string(),
+                    ty: f.ty.into_token_stream().to_string()
+                }
+            }).collect();
+            register_struct(StructDescription {
+                name: ident.to_string(),
+                fields
+            });
+            return quote!{};
         }
     }
     
-    panic!("IncludeJson only supports named structs");
+    panic!("only named structs supported");
 }
