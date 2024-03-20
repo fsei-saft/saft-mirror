@@ -54,7 +54,7 @@
         #align(bottom)[#line(length: 100%)]
     ]
 )[
-    #align(right)[München, 07.03.2024]
+    #align(right)[München, #data.date]
 
     *Rechnung Nr. #data.number*
 
@@ -64,26 +64,29 @@
 
     vielen Dank für Ihren Auftrag. Wir erlauben uns Ihnen folgende Positionen in Rechnung zu stellen:
 
-    #let items = data.items.map((item) => (
-        [1], [POST3415], [#item.description], [15,00€],
-    )).flatten();
-
     #tablex(
         columns: (1fr, 2fr, 4fr, 2fr),
         rows: (14pt, auto),
         header-rows: 1,
         [#text(size: 7pt)[_Anzahl_]], [#text(size: 7pt)[_Art. Nr._]], [#text(size: 7pt)[_Beschreibung_]], [#text(size: 7pt)[_Gesamtpreis_]],
-        ..items
+        ..data.items.map((item) => (
+            [#item.quantity], [#item.number], [#item.description], [#item.total€],
+        )).flatten()
     )
 
     #v(5pt, weak: true)
 
+    #let items = data.items.map((item) => (
+        [#item.quantity], [POST3415], [#item.description], [#item.total],
+    )).flatten();
+
     #tablex(
         columns: (7fr, 2fr),
         rows: (auto),
-        [Gesamtsumme], [*19,00€*],
-        [inkl. 7% erm. MwSt.], [0,00€],
-        [inkl. 19 % MwSt.], [3,03€]
+        [Gesamtsumme], [*#data.total€*],
+        ..data.taxes.map((tax) => (
+            [#tax.description], [#tax.total€],
+        )).flatten()
     )
 
     Die Leistung wurde am 07.03.2024 erbracht.

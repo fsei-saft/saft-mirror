@@ -9,7 +9,8 @@ use rocket_okapi::settings::UrlObject;
 fn entry() -> _ {
     rocket::build()
         .mount("/", openapi_get_routes![
-            invoice::invoice
+            invoice::invoice_get,
+            invoice::invoice_post
         ])
         .mount("/docs", make_rapidoc(&RapiDocConfig {
             general: GeneralConfig {

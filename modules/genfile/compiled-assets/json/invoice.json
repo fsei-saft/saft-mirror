@@ -4,20 +4,33 @@
         "address": "Georg Simon Ohm\nTheresienstraße 90\n80333 München"
     },
     "issuer": "James Clerk Maxwell",
+    "date": "20.03.2024",
+    "total": 3.57,
     "items": [
         {
-            "amount": 1,
+            "quantity": 1,
             "description": "Poster",
+            "number": "POST0001",
             "netto": 1.0,
-            "brutto": 1.0,
-            "tax_rate": 0.19
+            "brutto": 1.19,
+            "tax_rate": 0.19,
+            "total": 1.19
         },
         {
-            "amount": 1,
+            "quantity": 2,
             "description": "Thesis",
+            "number": "THE0001",
             "netto": 1.0,
-            "brutto": 1.0,
-            "tax_rate": 0.19
+            "brutto": 1.19,
+            "tax_rate": 0.19,
+            "total": 2.38
+        }
+    ],
+    "taxes": [
+        {
+            "rate": 0.19,
+            "description": "inkl. 19 % MwSt.",
+            "total": 0.57
         }
     ]
 }
