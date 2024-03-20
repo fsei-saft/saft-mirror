@@ -2,20 +2,21 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs-mozilla.url = "github:mozilla/nixpkgs-mozilla";
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-  outputs = { self, nixpkgs, flake-utils, nixpkgs-mozilla, ... }: flake-utils.lib.eachDefaultSystem (system:
+  outputs = { self, nixpkgs, flake-utils, rust-overlay, ... }: flake-utils.lib.eachDefaultSystem (system:
     let
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ nixpkgs-mozilla.overlays.rust ];
+        overlays = [ rust-overlay.overlays.default ];
       };
     in {
       devShell = pkgs.mkShell rec {
         buildInputs = with pkgs; [
-          (rustChannelOf { channel = "nightly"; date = "2024-02-08"; }).rust
-          (rustChannelOf { channel = "nightly"; date = "2024-02-08"; }).rust-src
+          (rust-bin.selectLatestNightlyWith (toolchain: toolchain.default.override {
+            extensions = [ "rust-src" ];
+          }))
           typst
         ];
       };
