@@ -765,20 +765,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "genfile"
-version = "0.1.0"
-dependencies = [
- "include_json",
- "lazy_static",
- "libsaft",
- "rocket",
- "rocket_okapi",
- "schemars",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "getrandom"
 version = "0.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1236,6 +1222,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "kaki"
+version = "0.1.0"
+dependencies = [
+ "include_json",
+ "lazy_static",
+ "libsaft",
+ "rocket",
+ "rocket_okapi",
+ "schemars",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "kurbo"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1497,6 +1497,14 @@ name = "once_cell"
 version = "1.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92"
+
+[[package]]
+name = "opfel"
+version = "0.0.1"
+dependencies = [
+ "rocket",
+ "rocket_okapi",
+]
 
 [[package]]
 name = "overload"

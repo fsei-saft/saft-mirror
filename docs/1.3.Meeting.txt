@@ -1,3 +1,0 @@
-Wir haben unseres erstes Meeting:
-- es wurde beschlossen dieses Projekt in Rust zu coden
-- Eine Modulbeschreibung wurde angefangen um die Applicationarchitektur zu definieren

@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "modules/libsaft",
-    "modules/genfile",
-    "modules/include_json"
+    "modules/kaki",
+    "modules/include_json",
+    "modules/opfel"
 ]

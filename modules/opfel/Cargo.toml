@@ -1,0 +1,13 @@
+[package]
+name = "opfel"
+version = "0.0.1"
+authors = ["Linorym <linorym@fs.ei.tum.de>"]
+edition = "2021"
+description = "Opfel - das Skriptemanagement tool"
+
+[dependencies]
+rocket = { version = "0.5"}
+rocket_okapi = { version = "0.8", features = ["rapidoc"] }
+
+[features]
+default = []
