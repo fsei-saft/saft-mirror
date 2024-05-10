@@ -17,6 +17,7 @@
           (rust-bin.selectLatestNightlyWith (toolchain: toolchain.default.override {
             extensions = [ "rust-src" ];
           }))
+          cargo-watch
           typst
         ];
       };

@@ -4,5 +4,6 @@ members = [
     "modules/libsaft",
     "modules/kaki",
     "modules/include_json",
-    "modules/opfel"
+    "modules/opfel",
+    "modules/pos"
 ]

@@ -1,0 +1,2 @@
+[default.databases.pos]
+url = "tmp/pos.sqlite"

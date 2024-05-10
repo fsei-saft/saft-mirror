@@ -1,4 +1,6 @@
 target
 
+tmp/*.sqlite
+
 .envrc
 .direnv
