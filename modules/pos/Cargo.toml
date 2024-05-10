@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+libsaft = { path = "../libsaft", features = ["web"] }
+
 rocket = "0.5"
 rocket_okapi = { version = "0.8", features = ["rapidoc"] }
 schemars = "0.8"

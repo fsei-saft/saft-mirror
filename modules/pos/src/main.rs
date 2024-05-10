@@ -1,25 +1,23 @@
+use libsaft::db::Connection;
+use libsaft::err::SaftResult;
+
 use rocket::{launch, get};
 use rocket_okapi::{openapi_get_routes, openapi};
 use rocket_okapi::rapidoc::{GeneralConfig, make_rapidoc, RapiDocConfig};
 use rocket_okapi::settings::UrlObject;
-use rocket_okapi::request::{OpenApiFromRequest, RequestHeaderInput};
-use rocket_okapi::gen::OpenApiGenerator;
-use rocket_db_pools::{sqlx, Database, Connection};
+use rocket_db_pools::{sqlx, Database};
 
 #[derive(Database)]
 #[database("pos")]
 struct Db(sqlx::SqlitePool);
 
-impl<'r> OpenApiFromRequest<'r> for &'r Db {
-    fn from_request_input(_gen: &mut OpenApiGenerator, _name: String, _required: bool) -> rocket_okapi::Result<RequestHeaderInput> {
-        Ok(RequestHeaderInput::None)
-    }
-}
-
 #[openapi]
 #[get("/")]
-async fn test(_db: &Db) -> () {
-    ()
+async fn test(mut db: Connection<Db>) -> SaftResult<()> {
+    let _ = sqlx::query("SELECT content FROM logs WHERE id = ?")
+        .bind(0)
+        .fetch_one(&mut **db).await?;
+    Ok(())
 }
 
 #[launch]

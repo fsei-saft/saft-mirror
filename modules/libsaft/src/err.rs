@@ -2,22 +2,31 @@ use std::fmt::Debug;
 
 #[cfg(feature = "pdf")]
 use ecow::EcoVec;
-use rocket::{Request, Response};
-use rocket::http::{ContentType, Status};
+#[cfg(feature = "pdf")]
 use typst::diag::SourceDiagnostic;
+#[cfg(feature = "pdf")]
 use typst::World;
-
+#[cfg(feature = "web")]
+use rocket::{Request, Response};
+#[cfg(feature = "web")]
+use rocket::http::{ContentType, Status};
 #[cfg(feature = "web")]
 use rocket::response::Responder;
+#[cfg(feature = "web")]
 use rocket_okapi::response::OpenApiResponderInner;
+#[cfg(feature = "web")]
 use rocket_okapi::gen::OpenApiGenerator;
+#[cfg(feature = "web")]
 use rocket_okapi::okapi::openapi3::Responses;
+#[cfg(feature = "web")]
 use rocket_okapi::util::ensure_status_code_exists;
-use crate::err::SaftErrKind::Typst;
+#[cfg(feature = "web")]
+use rocket_db_pools::sqlx;
 
 #[derive(Debug)]
 pub enum SaftErrKind {
-    Typst
+    Typst,
+    Db
 }
 
 #[derive(Debug)]
@@ -41,8 +50,18 @@ impl<T: World> From<(EcoVec<SourceDiagnostic>, &T)> for SaftErr {
         }
 
         Self {
-            kind: Typst,
+            kind: SaftErrKind::Typst,
             msg
+        }
+    }
+}
+
+#[cfg(feature = "web")]
+impl From<sqlx::Error> for SaftErr {
+    fn from(e: sqlx::Error) -> Self {
+        Self {
+            kind: SaftErrKind::Db,
+            msg: format!("{}", e)
         }
     }
 }

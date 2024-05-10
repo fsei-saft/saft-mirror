@@ -1683,6 +1683,7 @@ dependencies = [
  "comemo",
  "ecow",
  "rocket",
+ "rocket_db_pools",
  "rocket_okapi",
  "serde",
  "serde_json",
@@ -2178,6 +2179,7 @@ dependencies = [
 name = "pos"
 version = "0.1.0"
 dependencies = [
+ "libsaft",
  "rocket",
  "rocket_db_pools",
  "rocket_okapi",
