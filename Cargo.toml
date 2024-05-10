@@ -7,5 +7,4 @@ members = [
     "modules/opfel",
     "modules/pos"
     "modules/kiwi"
-<<<<<<< HEAD
->>>>>>> 135216b (kiwi test Setup)
+

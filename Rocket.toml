@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 [default.databases.pos]
 url = "tmp/pos.sqlite"
 [default.databases.kiwi]
 url = "Database/kiwi.db"
->>>>>>> 72a6b55 (PoC aus DB kann jetzt gelesen werden mit dem pk)
