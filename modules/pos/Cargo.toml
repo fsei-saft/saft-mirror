@@ -7,7 +7,7 @@ edition = "2021"
 libsaft = { path = "../libsaft", features = ["web"] }
 
 rocket = "0.5"
-rocket_okapi = { version = "0.8", features = ["rapidoc"] }
+rocket_okapi = { version = "0.8", features = ["rapidoc", "rocket_db_pools"] }
 schemars = "0.8"
 rocket_db_pools = { version = "0.1", features = ["sqlx_sqlite"] }
 

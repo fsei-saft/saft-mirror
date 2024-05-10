@@ -4,4 +4,4 @@ pub mod err;
 pub mod pdf;
 
 #[cfg(feature = "web")]
-pub mod db;
+pub mod template;

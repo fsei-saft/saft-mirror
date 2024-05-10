@@ -16,12 +16,14 @@ rocket = { version = "0.5", optional = true }
 rocket_okapi = { version = "0.8", optional = true }
 rocket_db_pools = { version = "0.1", features = [], optional = true }
 
+tera = { version = "1.19", optional = true }
+
 chrono = "0.4"
 
 [features]
 default = []
 pdf = ["typst", "typst-pdf", "comemo", "ecow", "serde", "serde_json"]
-web = ["rocket", "rocket_okapi", "rocket_db_pools"]
+web = ["rocket", "rocket_okapi", "rocket_db_pools", "tera", "serde"]
 
 [package.metadata.docs.rs]
 all-features = true
