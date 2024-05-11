@@ -1,5 +1,6 @@
 use rocket::{delete, uri};
 use rocket::response::Redirect;
+use rocket::http::ContentType;
 use rocket_dyn_templates::context;
 use rocket_db_pools::Connection;
 use rocket::{get, post};
@@ -32,7 +33,7 @@ async fn delete(id: i64, mut db: Connection<Db>) -> SaftResult<Redirect> {
         .bind(id)
         .execute(&mut **db).await?;
 
-    Ok(Redirect::to(uri!("/transactions")))
+    Ok(Redirect::to(uri!("/transactions/list")))
 }
 
 #[openapi]
@@ -42,7 +43,7 @@ async fn create(transaction: Form<CreateTransaction>, mut db: Connection<Db>) ->
         .bind(&transaction.description)
         .execute(&mut **db).await?;
 
-    Ok(Redirect::to(uri!("/transactions")))
+    Ok(Redirect::to(uri!("/transactions/list")))
 }
 
 #[openapi]
@@ -52,7 +53,7 @@ async fn new() -> SaftResult<Template> {
 }
 
 #[openapi]
-#[get("/transactions")]
+#[get("/transactions/list")]
 async fn list(mut db: Connection<Db>) -> SaftResult<Template> {
     let transactions: Vec<Transaction> = sqlx::query("SELECT id, description FROM transactions")
         .fetch_all(&mut **db).await?
@@ -66,6 +67,12 @@ async fn list(mut db: Connection<Db>) -> SaftResult<Template> {
     Ok(Template::render("transactions_list.html.tera", include_str!("../compiled-assets/templates/transactions_list.html.tera"), context![transactions]))
 }
 
+#[openapi]
+#[get("/transactions")]
+async fn index() -> (ContentType, &'static str) {
+    (ContentType::HTML, include_str!("../compiled-assets/templates/transactions.html"))
+}
+
 pub fn stage() -> (Vec<rocket::Route>, OpenApi) {
-    openapi_get_routes_spec![delete, create, new, list]
+    openapi_get_routes_spec![index, delete, create, new, list]
 }

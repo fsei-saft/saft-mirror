@@ -26,13 +26,33 @@ use rocket_db_pools::sqlx;
 #[derive(Debug)]
 pub enum SaftErrKind {
     Typst,
-    Db
+    Db,
+    ResourceNotFound
+}
+
+impl Into<Status> for SaftErrKind {
+    fn into(self) -> Status {
+        match self {
+            Self::Typst => Status::InternalServerError,
+            Self::Db => Status::InternalServerError,
+            Self::ResourceNotFound => Status::NotFound
+        }
+    }
 }
 
 #[derive(Debug)]
 pub struct SaftErr {
     kind: SaftErrKind,
     msg: String
+}
+
+impl From<SaftErrKind> for SaftErr {
+    fn from(kind: SaftErrKind) -> Self {
+        Self {
+            kind,
+            msg: String::new()
+        }
+    }
 }
 
 #[cfg(feature = "pdf")]
@@ -70,12 +90,12 @@ impl From<sqlx::Error> for SaftErr {
 impl<'r, 'o: 'r> Responder<'r, 'o> for SaftErr {
     fn respond_to(self, request: &'r Request<'_>) -> rocket::response::Result<'o> {
         let file = format!(
-            include_str!("../compiled-assets/html/500.html"),
+            include_str!("../compiled-assets/html/error.html"),
             self.kind,
             self.msg
         );
 
-        let response = (Status::InternalServerError, (ContentType::HTML, file));
+        let response: (Status, (ContentType, String)) = (self.kind.into(), (ContentType::HTML, file));
         Response::build_from(response.respond_to(request)?).ok()
     }
 }

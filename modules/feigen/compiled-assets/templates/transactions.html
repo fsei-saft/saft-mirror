@@ -7,6 +7,7 @@
     </head>
     <body>
         <h1>feigen - saft</h1>
-        <a href="/transactions">Transactions</a>
+        <div id="content" hx-get="/transactions/list" hx-trigger="load"></div>
+        <button hx-get="/transactions/new" hx-target="#content">New</button>
     </body>
 </html>

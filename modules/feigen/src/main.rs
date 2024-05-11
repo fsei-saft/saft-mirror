@@ -8,6 +8,7 @@ use rocket_db_pools::Database;
 use sqlx;
 
 use libsaft::template::Template;
+use libsaft::err::{SaftResult, SaftErrKind};
 
 mod db;
 mod transactions;
@@ -16,6 +17,15 @@ mod transactions;
 #[get("/")]
 async fn index() -> (ContentType, &'static str) {
     (ContentType::HTML, include_str!("../compiled-assets/templates/index.html"))
+}
+
+#[openapi]
+#[get("/resources/<file>")]
+async fn resources(file: String) -> SaftResult<(ContentType, &'static str)> {
+    match file.as_str() {
+        "htmx.min.js" => Ok((ContentType::JavaScript, include_str!("../compiled-assets/resources/htmx.min.js"))),
+        _ => Err(SaftErrKind::ResourceNotFound.into())
+    }
 }
 
 #[launch]
@@ -37,7 +47,7 @@ fn entry() -> _ {
     let settings = rocket_okapi::settings::OpenApiSettings::default();
     mount_endpoints_and_merged_docs!{
         rocket, "/".to_string(), settings,
-        "/" => openapi_get_routes_spec![index],
+        "/" => openapi_get_routes_spec![index, resources],
         "/" => transactions::stage(),
     };
 
