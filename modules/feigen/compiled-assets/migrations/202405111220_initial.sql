@@ -1,0 +1,4 @@
+CREATE TABLE transactions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    description VARCHAR NOT NULL
+);

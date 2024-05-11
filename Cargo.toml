@@ -5,6 +5,6 @@ members = [
     "modules/kaki",
     "modules/include_json",
     "modules/opfel",
-    "modules/pos",
+    "modules/feigen",
     "modules/kiwi"
 ]

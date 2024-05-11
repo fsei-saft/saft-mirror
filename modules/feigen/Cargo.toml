@@ -1,5 +1,5 @@
 [package]
-name = "pos"
+name = "feigen"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,7 +9,9 @@ libsaft = { path = "../libsaft", features = ["web"] }
 rocket = "0.5"
 rocket_okapi = { version = "0.8", features = ["rapidoc", "rocket_db_pools"] }
 schemars = "0.8"
-rocket_db_pools = { version = "0.1", features = ["sqlx_sqlite"] }
+rocket_db_pools = { version = "0.1", features = ["sqlx_sqlite", "sqlx_postgres"] }
+rocket_dyn_templates = { version = "0.1", features = ["tera"] }
+sqlx = { version = "0.7", default-features = false, features = ["macros", "migrate", "any"] }
 
 serde = "1.0"
 serde_json = "1.0"
