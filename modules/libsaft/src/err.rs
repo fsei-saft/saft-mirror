@@ -80,6 +80,7 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for SaftErr {
     }
 }
 
+
 #[cfg(feature = "web")]
 impl OpenApiResponderInner for SaftErr {
     fn responses(_gen: &mut OpenApiGenerator) -> rocket_okapi::Result<Responses> {
