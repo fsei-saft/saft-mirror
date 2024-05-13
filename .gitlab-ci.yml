@@ -6,6 +6,7 @@ stages:
 build-job:
   stage: build
   script:
+    - apt update
     - apt install curl
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
     - rustup toolchain install nightly --profile complete
@@ -20,6 +21,7 @@ build-job:
 unit-test-job:
   stage: test
   script:
+    - apt update
     - apt install curl
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
     - rustup toolchain install nightly --profile complete
