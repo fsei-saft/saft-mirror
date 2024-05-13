@@ -1,4 +1,4 @@
-# SAFT
+# Skripten- Abschlussarbeiten- und FinanzTool
 
 Wilkommen zu SAFT!
 
@@ -46,3 +46,7 @@ Und bei der Rocket Initialisierung wird noch rapidoc hinzugefügt
 Libraries haben keine ausführbare Dateien, sind aber esenziell zur Funktionsfähigkeit von SAFT.
 - libsaft hat code und Dateien die allgemein zu benutzen sind um Einheitlichkeit zu behalten
 - include_jason macht etwas was ich garnicht verstehe (Oli)
+
+## Lizenz
+
+Siehe [LICENSE.md](LICENSE.md).
