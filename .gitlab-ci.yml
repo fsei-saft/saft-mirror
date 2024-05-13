@@ -9,6 +9,7 @@ build-job:
     - apt update
     - apt install curl -y
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
+    - . "$HOME/.cargo/env"
     - rustup toolchain install nightly --profile complete
     - cargo build
   artifacts:
@@ -24,5 +25,6 @@ unit-test-job:
     - apt update
     - apt install curl -y
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
+    - . "$HOME/.cargo/env"
     - rustup toolchain install nightly --profile complete
     - cargo test
