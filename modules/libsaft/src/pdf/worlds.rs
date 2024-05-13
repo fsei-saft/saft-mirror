@@ -57,7 +57,7 @@ impl World for SimpleGeneratorTypstWorld {
     }
 
     fn font(&self, index: usize) -> Option<Font> {
-        self.fonts.get(index).map(|f| f.clone())
+        self.fonts.get(index).cloned()
     }
 
     fn today(&self, offset: Option<i64>) -> Option<Datetime> {

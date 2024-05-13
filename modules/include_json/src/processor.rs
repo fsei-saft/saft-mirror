@@ -9,13 +9,13 @@ pub fn process_value(json: Value, ty: String) -> TokenStream {
     match json {
         Value::Null => { quote!{None} }
         Value::Array(v) => {
-            let ty = parse_str::<Type>(&ty).expect(&format!("\"{}\" is not a type", ty));
+            let ty = parse_str::<Type>(&ty).unwrap_or_else(|_| panic!("\"{}\" is not a type", ty));
 
             if let Type::Path(ty) = &ty {
-                let ty = ty.path.segments.first().expect(&format!("array type \"{}\" is not compatible", ty.into_token_stream().to_string()));
-                if ty.ident.to_string() == "Vec" {
+                let ty = ty.path.segments.first().unwrap_or_else(|| panic!("array type \"{}\" is not compatible", ty.into_token_stream()));
+                if ty.ident == "Vec" {
                     if let PathArguments::AngleBracketed(args) = &ty.arguments {
-                        if let GenericArgument::Type(arg) = args.args.first().expect(&format!("array type \"{}\" is not compatible", ty.into_token_stream().to_string())) {
+                        if let GenericArgument::Type(arg) = args.args.first().unwrap_or_else(|| panic!("array type \"{}\" is not compatible", ty.into_token_stream())) {
                             let ty = arg.into_token_stream().to_string();
                             let elements = v.into_iter().map(|e| { process_value(e, ty.clone()) });
                             return quote!{vec![#(#elements,)*]};
@@ -24,7 +24,7 @@ pub fn process_value(json: Value, ty: String) -> TokenStream {
                 }
             }
 
-            panic!("array type \"{}\" is not compatible", ty.into_token_stream().to_string());
+            panic!("array type \"{}\" is not compatible", ty.into_token_stream());
         }
         Value::Bool(v) => { quote!{#v} }
         Value::Number(v) => { 
@@ -44,7 +44,7 @@ pub fn process_value(json: Value, ty: String) -> TokenStream {
         }
         Value::String(v) => { quote!{#v.to_string()} }
         Value::Object(v) => {
-            process_struct(v, get_struct(&ty).expect(&format!("struct \"{}\" not cached", &ty)))
+            process_struct(v, get_struct(&ty).unwrap_or_else(|| panic!("struct \"{}\" not cached", &ty)))
         }
     }
 }

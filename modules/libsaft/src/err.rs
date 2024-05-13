@@ -30,12 +30,12 @@ pub enum SaftErrKind {
     ResourceNotFound
 }
 
-impl Into<Status> for SaftErrKind {
-    fn into(self) -> Status {
-        match self {
-            Self::Typst => Status::InternalServerError,
-            Self::Db => Status::InternalServerError,
-            Self::ResourceNotFound => Status::NotFound
+impl From<SaftErrKind> for Status {
+    fn from(val: SaftErrKind) -> Status {
+        match val {
+            SaftErrKind::Typst => Status::InternalServerError,
+            SaftErrKind::Db => Status::InternalServerError,
+            SaftErrKind::ResourceNotFound => Status::NotFound
         }
     }
 }

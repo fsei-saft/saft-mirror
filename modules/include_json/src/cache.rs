@@ -21,5 +21,5 @@ pub fn register_struct(s: StructDescription) {
 }
 
 pub fn get_struct(name: &str) -> Option<StructDescription> {
-    STRUCT_DEFS.lock().unwrap().get(name).map(|v| v.clone())
+    STRUCT_DEFS.lock().unwrap().get(name).cloned()
 }

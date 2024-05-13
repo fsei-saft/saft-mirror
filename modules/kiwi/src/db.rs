@@ -1,12 +1,10 @@
-use std::fmt::format;
-
 use libsaft::err::SaftResult;
 use libsaft::template::Template;
 use rocket_dyn_templates::context;
 use crate::Db;
 
 
-use rocket::{http::ContentType, get, post, FromForm, uri};
+use rocket::{get, post, FromForm, uri};
 use rocket::form::Form;
 use rocket::serde::{Deserialize, Serialize};
 use rocket_okapi::{JsonSchema, openapi};
@@ -61,7 +59,7 @@ pub async fn entry(script: Form<Script>, mut db: rocket_db_pools::Connection<Db>
         .bind(&script.id)
         .bind(&script.name)
         .bind(&script.chair)
-        .bind(&script.active)
+        .bind(script.active)
         .execute(&mut **db).await?;
     Ok(Redirect::to(uri!(table)))
 }
@@ -83,7 +81,7 @@ pub async fn edit(script: Form<Script>, mut db: rocket_db_pools::Connection<Db>)
         .bind(&script.id)
         .bind(&script.name)
         .bind(&script.chair)
-        .bind(&script.active)
+        .bind(script.active)
     .execute(&mut **db).await?;
      Ok(Redirect::to(uri!(table)))
 }

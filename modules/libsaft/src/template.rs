@@ -42,26 +42,26 @@ impl Template {
     }
 
     pub fn finalise(self, ctx: &mut Context) -> Result<(ContentType, String), Status> {
-        if !ctx.engine.get_template_names().find(|v| v == &self.name).is_some() {
-            ctx.engine.add_raw_template(self.name, self.source).or_else(|_| {
+        if !ctx.engine.get_template_names().any(|v| v == self.name) {
+            ctx.engine.add_raw_template(self.name, self.source).map_err(|_| {
                 error_!("Failed to parse template \"{}\".", self.name);
-                Err(Status::InternalServerError)
+                Status::InternalServerError
             })?;
         }
 
-        let value = self.value.or_else(|_| {
+        let value = self.value.map_err(|_| {
             error_!("Failed to serialise template context.");
-            Err(Status::InternalServerError)
+            Status::InternalServerError
         })?;
 
-        let value = tera::Context::from_serialize(value).or_else(|_| {
+        let value = tera::Context::from_serialize(value).map_err(|_| {
             error_!("Failed to serialise template context.");
-            Err(Status::InternalServerError)
+            Status::InternalServerError
         })?;
 
-        let rendered = ctx.engine.render(self.name, &value).or_else(|_| {
+        let rendered = ctx.engine.render(self.name, &value).map_err(|_| {
             error_!("Failed to render template \"{}\".", self.name);
-            Err(Status::InternalServerError)
+            Status::InternalServerError
         })?;
 
         Ok((ContentType::HTML, rendered))
@@ -93,7 +93,7 @@ impl Fairing for TemplateFairing {
     }
 
     async fn on_ignite(&self, rocket: Rocket<Build>) -> fairing::Result {
-        Ok(rocket.manage(ContextManager::new(Context::new())))
+        Ok(rocket.manage(ContextManager::new(Context::default())))
     }
 
     async fn on_liftoff(&self, rocket: &Rocket<Orbit>) {
@@ -103,16 +103,9 @@ impl Fairing for TemplateFairing {
     }
 }
 
+#[derive(Default)]
 pub struct Context {
     pub engine: Tera
-}
-
-impl Context {
-    pub fn new() -> Context {
-        Context {
-            engine: Tera::default()
-        }
-    }
 }
 
 pub struct ContextManager {
