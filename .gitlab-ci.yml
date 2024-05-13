@@ -7,7 +7,7 @@ build-job:
   stage: build
   script:
     - apt update
-    - apt install curl -y
+    - apt install curl gcc -y
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
     - . "$HOME/.cargo/env"
     - rustup toolchain install nightly --profile complete
@@ -23,7 +23,7 @@ unit-test-job:
   stage: test
   script:
     - apt update
-    - apt install curl -y
+    - apt install curl gcc -y
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
     - . "$HOME/.cargo/env"
     - rustup toolchain install nightly --profile complete
