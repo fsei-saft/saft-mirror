@@ -14,7 +14,7 @@ serde_json = { version = "1.0", optional = true }
 
 rocket = { version = "0.5", optional = true }
 rocket_okapi = { version = "0.8", optional = true }
-rocket_db_pools = { version = "0.1", features = [], optional = true }
+rocket_db_pools = { version = "0.1", features = ["sqlx_sqlite", "sqlx_postgres"], optional = true }
 
 tera = { version = "1.19", optional = true }
 

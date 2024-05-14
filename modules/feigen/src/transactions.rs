@@ -1,4 +1,4 @@
-use rocket::{delete, uri};
+use rocket::{delete, uri, Rocket, Build};
 use rocket::response::Redirect;
 use rocket::http::ContentType;
 use rocket_dyn_templates::context;
@@ -6,12 +6,12 @@ use rocket_db_pools::Connection;
 use rocket::{get, post};
 use rocket::form::{Form, FromForm};
 use rocket_okapi::{JsonSchema, openapi_get_routes_spec, openapi};
-use rocket_okapi::okapi::openapi3::OpenApi;
 use sqlx::{self, Row};
 use serde::{Serialize, Deserialize};
 
 use libsaft::err::SaftResult;
 use libsaft::template::Template;
+use libsaft::docs::SaftDocsState;
 
 use crate::db::Db;
 
@@ -73,6 +73,8 @@ async fn index() -> (ContentType, &'static str) {
     (ContentType::HTML, include_str!("../compiled-assets/templates/transactions.html"))
 }
 
-pub fn stage() -> (Vec<rocket::Route>, OpenApi) {
-    openapi_get_routes_spec![index, delete, create, new, list]
+pub async fn stage(rocket: Rocket<Build>) -> Rocket<Build> {
+    let (routes, api_spec) = openapi_get_routes_spec![index, delete, create, new, list];
+    rocket.state::<SaftDocsState>().unwrap().merge(&api_spec);
+    rocket.mount("/", routes)
 }
