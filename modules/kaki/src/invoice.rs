@@ -14,6 +14,7 @@ pub struct InvoiceInfo {
     recipient: InvoiceRecipient,
     issuer: String,
     date: String,
+    servicedate: String,
     total: f64,
     items: Vec<InvoiceItem>,
     taxes: Vec<InvoiceTax>

@@ -89,7 +89,7 @@
         )).flatten()
     )
 
-    Die Leistung wurde am 07.03.2024 erbracht.
+    Die Leistung wurde am #data.servicedate erbracht.
 
     Bitte überweisen Sie den fälligen Gesamtbetrag unter Angabe der Rechnungsnummer innerhalb von 14 Tagen auf unser unten angegebenes Konto.
 
