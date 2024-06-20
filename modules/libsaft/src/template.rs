@@ -126,4 +126,17 @@ impl ContextManager {
     fn context_mut(&self) -> impl DerefMut<Target=Context> + '_ {
         self.context.write().unwrap()
     }
+
+    pub fn template_add(&self, name:&str, template:&str) ->Result<(),tera::Error> {
+        self.context_mut().engine.add_raw_template(name, template)
+    }
+    pub fn templates_add<I, N, C>(&self, templates: I) -> Result<(),tera::Error>
+    where
+        I: IntoIterator<Item = (N, C)>,
+        N: AsRef<str>,
+        C: AsRef<str>
+    {
+        self.context_mut().engine.add_raw_templates(templates)
+    }
 }
+
