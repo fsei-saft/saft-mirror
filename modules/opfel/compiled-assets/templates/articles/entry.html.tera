@@ -1,0 +1,25 @@
+<table class="table table-borderless">
+<thead>
+    <tr>
+      <th scope="col"style="visibility:hidden;">id</th>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Chair</th>
+      <th scope="col">Aktiv</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for article in articles -%}
+    <tr>
+        <td style="visibility:hidden;">{{article.id}}</td>
+        <th scope="row">{{article.p_id}}</th>
+        <td>{{article.name}}</td>
+        <td>{{article.chair}}</td>
+        <td>
+            <button hx-delete="/articles/{{ article.id }}" hx-target="#content">Delete</button>
+        </td>
+    </tr>
+    {%- endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,15 @@
+<form hx-post="/articles" hx-target="#content">
+  <div class="mb-3">
+    <label for="p_id" class="form-label">ID</label>
+    <input type="text" class="form-control" name="p_id" id="p_id">
+  </div>
+  <div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input type="text" class="form-control" name="name" id="name">
+  </div>
+  <div class="mb-3">
+    <label for="chair" class="form-label">Lehrstuhl</label>
+    <input type="text" class="form-control" name="chair" id="chair">
+  </div>
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
