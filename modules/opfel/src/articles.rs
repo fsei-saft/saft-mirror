@@ -1,7 +1,6 @@
 use rocket::{get, post, delete, uri, Rocket, Build};
 use rocket_okapi::{JsonSchema, openapi_get_routes_spec, openapi};
 use rocket::response::Redirect;
-use rocket::http::ContentType;
 use serde::{Deserialize, Serialize};
 use rocket::form::{Form, FromForm};
 use rocket_dyn_templates::context;
@@ -9,7 +8,7 @@ use sqlx::{self, Row};
 use rocket_db_pools::Connection;
 
 use libsaft::err::SaftResult;
-use libsaft::template::{Template,ContextManager};
+use libsaft::template::Template;
 use libsaft::docs::SaftDocsState;
 use crate::db::Db;
 
@@ -29,12 +28,10 @@ pub struct CreateScript {
 }
 
 
-let HTML: str = "../compiled-assets/templates/articles";
-
 #[openapi]
 #[get("/articles")]
-async fn index() -> (ContentType, &'static str) {
-    (ContentType::HTML, include_str!(concat!(HTML, "articles.html")))
+async fn index() -> SaftResult<Template> {
+    Ok(Template::render("articles/index", include_str!("../compiled-assets/templates/articles/articles.html.tera"), context![]))
 }
 
 ///Get row information based on pk
@@ -51,14 +48,14 @@ pub async fn list(mut db: Connection<Db>) -> SaftResult<Template> {
             chair:row.get(3)
         })
         .collect();
-        Ok(Template::render("articles/entry", include_str!(concat!(HTML, "entry.html.tera")), context![articles]))
+        Ok(Template::render("articles/entry", include_str!("../compiled-assets/templates/articles/entry.html.tera"), context![articles]))
 }
 
 /// Row entry Form
 #[openapi]
 #[get("/articles/new")]
 pub async fn new() -> SaftResult<Template> {
-    Ok(Template::render("articles/new",include_str!{concat!(HTML, "new.html.tera")} ,context! {}))
+    Ok(Template::render("articles/new",include_str!{"../compiled-assets/templates/articles/new.html.tera"} ,context! {}))
 }
 
 /// push entry into DB

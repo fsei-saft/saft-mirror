@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Articles{% endblock title %}
+{% include "nav.html" %}
+
+
+{% block content %}
+  <h2>Datenbankeinträge</h2>
+  <div id="content" hx-get="/articles/list" hx-trigger="load"></div>
+  <button class="btn btn-primary" hx-get="/articles/new" hx-target="#content">New</button>
+{% endblock content %}
+

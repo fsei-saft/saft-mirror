@@ -14,12 +14,11 @@ use sqlx;
 mod db;
 mod articles;
 
-const HTML: &str = "../compiled-assets/templates/";
 
 #[openapi]
 #[get("/")]
 async fn index()  -> SaftResult<Template> {
-    Ok(Template::render("index", include_str!(concat!(HTML, "index.html.tera")), context![]))
+    Ok(Template::render("index", include_str!("../compiled-assets/templates/index.html.tera"), context![]))
 }
 
 #[launch]
@@ -41,9 +40,9 @@ async fn main_stage(rocket: Rocket<Build>) -> Rocket<Build> {
     let (routes, api_spec) = openapi_get_routes_spec![index];
     rocket.state::<SaftDocsState>().unwrap().merge(&api_spec);
     let common_templates = vec![
-        ("base.html", include_str!(concat!(HTML, "base.html"))),
-        ("nav.html.tera", include_str!(concat!(HTML, "nav.html")))];
+        ("base.html", include_str!("../compiled-assets/templates/common/base.html")),
+        ("nav.html", include_str!("../compiled-assets/templates/common/nav.html"))];
 
-    rocket.state::<ContextManager>().unwrap().templates_add(common_templates);
+    let _ = rocket.state::<ContextManager>().unwrap().templates_add(common_templates);
     rocket.mount("/", routes)
 }

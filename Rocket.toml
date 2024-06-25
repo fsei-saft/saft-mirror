@@ -1,6 +1,12 @@
-[default.databases.feigen]
+[debug.databases.feigen]
 url = "sqlite://tmp/feigen.sqlite"
 
-[default.databases.kiwi]
-url = "tmp/kiwi.sqlite"
+[debug.databases.kiwi]
+url = "sqlite://tmp/kiwi.sqlite"
 template_dir = "templates"
+
+[debug.databases.opfel]
+url = "sqlite://tmp/opfel.sqlite"
+template_dir = "templates"
+
+
