@@ -6,6 +6,7 @@
 {% block content %}
   <h2>Datenbankeinträge</h2>
   <div id="content" hx-get="/articles/list" hx-trigger="load"></div>
+  <br>
   <button class="btn btn-primary" hx-get="/articles/new" hx-target="#content">New</button>
 {% endblock content %}
 

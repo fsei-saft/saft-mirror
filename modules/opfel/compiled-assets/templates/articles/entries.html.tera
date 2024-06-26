@@ -16,6 +16,7 @@
         <th scope="row">{{article.p_id}}</th>
         <td>{{article.name}}</td>
         <td>{{article.chair}}</td>
+        <td>{% if article.active %}Ja{% else %}Nein{% endif %}</td>
         <td>
             <button hx-delete="/articles/{{ article.id }}" hx-target="#content">Delete</button>
         </td>
@@ -23,3 +24,4 @@
     {%- endfor %}
     </tbody>
 </table>
+

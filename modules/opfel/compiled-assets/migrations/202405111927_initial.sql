@@ -2,5 +2,6 @@ CREATE TABLE articles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     product_id VARCHAR NOT NULL,
     name VARCHAR NOT NULL,
-    chair VARCHAR NOT NULL
+    chair VARCHAR NOT NULL,
+    active INTEGER NOT NULL
 );

@@ -17,14 +17,16 @@ pub struct Script {
     id:   i64,
     p_id: String,
     name: String,
-    chair: String
+    chair: String,
+    active: bool
 }
 
 #[derive(Serialize, Deserialize, FromForm, JsonSchema, Clone)]
 pub struct CreateScript {
     p_id: String,
     name: String,
-    chair: String
+    chair: String,
+    active: bool
 }
 
 
@@ -38,17 +40,21 @@ async fn index() -> SaftResult<Template> {
 #[openapi]
 #[get("/articles/list")]
 pub async fn list(mut db: Connection<Db>) -> SaftResult<Template> {
-    let articles: Vec<Script> = sqlx::query("SELECT id, product_id, name, chair FROM articles")
-        .fetch_all(&mut **db).await?
-        .into_iter()
-        .map(|row| Script {
-            id: row.get(0),
-            p_id: row.get(1),
-            name: row.get(2),
-            chair:row.get(3)
-        })
-        .collect();
-        Ok(Template::render("articles/entry", include_str!("../compiled-assets/templates/articles/entry.html.tera"), context![articles]))
+    let rows = sqlx::query("SELECT id, product_id, name, chair, active FROM articles").fetch_all(&mut **db).await.unwrap();
+    let mut articles:Vec<Script> = vec![];
+    for r in rows {
+        let mut ac = false;
+        let i:i32 = r.get(4);
+        if i==1 {ac = true;}
+        let script:Script = Script {
+            id: r.get(0),
+            p_id: r.get(1),
+            name: r.get(2),
+            chair:r.get(3) ,
+            active: ac};
+        articles.push(script);
+    }
+    Ok(Template::render("articles/entries", include_str!("../compiled-assets/templates/articles/entries.html.tera"), context![articles]))
 }
 
 /// Row entry Form
@@ -62,14 +68,16 @@ pub async fn new() -> SaftResult<Template> {
 #[openapi]
 #[post("/articles", data = "<script>")]
 pub async fn entry(script: Form<CreateScript>, mut db: Connection<Db>) -> SaftResult<Redirect> {
+    let mut ac:i32 = 0;
+    if script.active {ac = 1;}
     sqlx::query(
-        "INSERT INTO articles    (product_id, name, chair)
-        VALUES ($1, $2, $3)")
+        "INSERT INTO articles (product_id, name, chair, active) VALUES ($1, $2, $3, $4)")
         .bind(&script.p_id)
         .bind(&script.name)
         .bind(&script.chair)
+        .bind(ac)
         .execute(&mut **db).await?;
-    Ok(Redirect::to(uri!("/articles/list")))
+    Ok(Redirect::to(uri!(index)))
 }
 
 //Edit an Entry in the DB
@@ -77,11 +85,12 @@ pub async fn entry(script: Form<CreateScript>, mut db: Connection<Db>) -> SaftRe
 #[post("/edit", data = "<script>")]
 pub async fn edit(script: Form<Script>, mut db: Connection<Db>) -> SaftResult<Redirect> {
     sqlx::query(
-        "UPDATE articles SET product_id =$1, name=$2, chair=$3")
+        "UPDATE articles SET product_id =$1, name=$2, chair=$3, active=$4")
         .bind(&script.p_id)
         .bind(&script.name)
         .bind(&script.chair)
-    .execute(&mut **db).await?;
+        .bind(&script.active)
+        .execute(&mut **db).await?;
      Ok(Redirect::to(uri!(index)))
 }
 
@@ -91,8 +100,7 @@ async fn delete(id: i64, mut db: Connection<Db>) -> SaftResult<Redirect> {
     let _ = sqlx::query("DELETE FROM articles WHERE id = ?")
         .bind(id)
         .execute(&mut **db).await?;
-
-    Ok(Redirect::to(uri!("/articles/list")))
+    Ok(Redirect::to(uri!(index)))
 }
 
 
